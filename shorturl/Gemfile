@@ -1,6 +1,5 @@
 gem "mongo"
 gem "beanstalk-client"
-gem "sinatra"
 gem "exceptional"
 
 group :test do
