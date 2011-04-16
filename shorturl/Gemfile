@@ -1,7 +1,0 @@
-gem "mongo"
-gem "beanstalk-client"
-gem "exceptional"
-
-group :test do
-  gem "rspec", '1.2.9'
-end
