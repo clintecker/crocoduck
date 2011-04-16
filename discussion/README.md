@@ -1,2 +1,0 @@
-Ars Discussion Service
-======================
