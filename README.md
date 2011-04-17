@@ -14,3 +14,7 @@ This is currently in the prototyping stage, but my goal here is to build:
 
 * How to let Resque know what kind of worker to use?  Entry could know how to enqueue itself, but it would need to know the class of the Job that needs to be used.
 * ``crocoduck/job.rb`` is intended to be extended and have the ``do_work`` method overridden.  Maybe this isn't the best way?
+
+### Attribution ###
+
+This project is in its formative stages; I'm taking a lot of inspiration or straight up jacking large bits of Josh Peek's [Mailbag](https://github.com/josh/mailbag) project as it is nearly applicable to the types of work I'm looking to do.
