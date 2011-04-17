@@ -1,4 +1,5 @@
 ### System for building reusable Resque Jobs ###
+#### That operate on similar kinds of Documents/Articles/Entries####
 
 This is currently in the prototyping stage, but my goal here is to build:
 
