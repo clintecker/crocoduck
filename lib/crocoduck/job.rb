@@ -23,6 +23,10 @@ module Crocoduck
     
     def do_work
       # Do Something with entry
+      # shorturl = shorturl.generate @entry.url
+      # store.update entry_id, 'shorturl', shorturl
+      # store.update entry_id, 'shorturl_status, job_status
+      
     end
     
     # A thin wrapper around the real workhorse (do_work)
@@ -31,12 +35,9 @@ module Crocoduck
       self.store = entry.store
       benchmark :info, "Running job" { do_work }
     rescue Exception =>e
-      entry.job_status = 'failure'
       entry.save
       raise e
     else
-      entry.job_status = 'success'
-      entry.job_at = Time.now
       entry.save
     ensure
       # Clean up mongo and anything else
