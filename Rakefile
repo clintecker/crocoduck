@@ -1,11 +1,7 @@
-require 'rubygems'
-gem 'rspec', '1.2.9'
-require 'bundler'
-require 'spec/rake/spectask'
-require 'rake/testtask'
+$:.unshift File.expand_path('../lib', __FILE__)
 require 'mongo'
+require 'resque/tasks'
 
-task :default => [:test, :spec]
 
 namespace :db do
   desc "Create indexes"
@@ -23,9 +19,7 @@ namespace :db do
   end
 end
 
-Rake::TestTask.new
+task :default => :test
 
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_files = Dir.glob('spec/**/*_spec.rb')
-  t.spec_opts << '--format specdoc'
-end
+require 'rake/testtask'
+Rake::TestTask.new
