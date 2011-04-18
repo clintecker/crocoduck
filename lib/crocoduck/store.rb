@@ -5,24 +5,37 @@ module Crocoduck
   class Store
     include Logging
     @id_field = '_id'
-    
-    attr_accessor :store, :entries, :collection, :db_name, :mongo_cluster
-    def initialize(mongo_cluster, db_name1, collection)
-      @collection = collection
-      @db_name = db_name
-      @mongo_cluster = mongo_cluster
+    @server_cluster = nil
+    @server_db = nil
+    @server_collection = nil
+
+    class << self
+      attr_accessor :id_field, :server_cluster, :server_db, :server_collection
     end
     
-    def entries
-      @entries ||= store.collection collection
+    attr_accessor :store, :database, :collection
+
+    def setup?
+      Crocoduck::Store.server_cluster && 
+      Crocoduck::Store.server_db && 
+      Crocoduck::Store.server_collection
+    end
+
+    def collection
+      @collection ||= database.collection Crocoduck::Store.server_collection
     end
     
-    def update(entry, field, value)
-      entries.update({id_field => entry[id_field]}, {'$set' => { field => value}}, :safe => true)
+    def update(entry_id, field, value)
+      collection.update({
+        Crocoduck::Store.id_field => entry_id}, 
+        {'$set' => { field => value}
+      }, :safe => true)
     end
         
-    def get(entry_id)
-      entries.find_one({id_field => entry_id.to_i})
+    def get(id)
+      collection.find_one({
+        Crocoduck::Store.id_field => id.to_i
+      })
     end
     
     def close
@@ -31,8 +44,12 @@ module Crocoduck
     
     private
     
+    def database
+      @database ||= store.db(Crocoduck::Store.server_db)
+    end
+    
     def store
-      @store ||= Mongo::Connection.multi(mongo_cluster).db(db_name)
+      @store ||= Mongo::ReplSetConnection.new(*Crocoduck::Store.server_cluster)
     end
   end
 end
