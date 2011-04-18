@@ -22,7 +22,8 @@ module Crocoduck
     
     def do_work
       # Do Something with entry
-      entry.update "derp", "herp"
+      # entry.update "derp", "herp"
+      sleep(10)
       # shorturl = shorturl.generate @entry.url
       # store.update entry_id, 'shorturl', shorturl
       # store.update entry_id, 'shorturl_status, job_status
