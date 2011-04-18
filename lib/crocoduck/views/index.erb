@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Derp</title>
+  <style type="text/css">
+    body {
+      font-size: 10px;
+      font-family: verdana, sans-serif;
+    }
+
+    form {
+      margin: 25px;
+    }
+
+    dt {
+      margin: 0;
+      padding: 2px 5px;
+      font-weight: bold;
+    }
+
+    dd {
+      margin: 0 0 15px 0;
+      padding: 5px;
+    }
+
+    input {
+      padding: 5px;
+      font-size: 10px;
+    }
+
+    input[type=text], input[type=email], input[type=datetime] {
+      width: 400px;
+    }
+
+    .status {
+      margin-top: 30px;
+    }
+
+    .status .failure {
+      color: white;
+      background: red;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <form action="/" method="post" novalidate>
+    <dl>
+      <dt><label for="entry_id">Entry ID:</label></dt>
+      <dd><input type="entry_id" name="entry_id" value=""></dd>
+      <dt>Connection Info:</dt>
+      <dd><%= Crocoduck::Store.server_cluster.inspect %>, <%= Crocoduck::Store.server_db %>, <%= Crocoduck::Store.server_collection %>
+    </dl>
+    <p><input type="submit" value="Update"></p>
+
+  </form>
+</body>
+</html>
