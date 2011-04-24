@@ -1,3 +1,6 @@
+# Include Loggging into your class to get a logger and benchmark
+# object for logging errors or information to stdout and for profiling
+# interesting bits of code.
 require 'benchmark'
 require 'logger'
 
@@ -15,7 +18,7 @@ module Crocoduck
       def benchmark(level, message)
         result = nil
         ms = Benchmark.realtime { result = yield }
-        logger.send(level, '%s (%.1fs)' % [ message, ms ])
+        logger.send(level, '%s (%.5fs)' % [ message, ms ])
         result
       end
   end
