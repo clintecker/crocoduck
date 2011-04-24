@@ -21,20 +21,16 @@ In addition, a job author can override several other methods to handle circumsta
   
 In an ideal world, one could install Crocoduck, and then build jobs on top of this class without having to do much beyond implementing their ``do_work`` code and possibly modifying the job's ``self.queue`` name.
 
-  
 ### Environments ###
   
 Your environment and your jobs must be imported for Resque to be able to use them when a matching job comes in on your specified queue.  An environment variable ``CROCODUCK_ENV`` is used to specify the name of the current operating environment.  This is currently only used to import our job classes and configure the ``Store`` options, but will later be expanded to the Redis configuration for Resque.  See the example
 
-  
 ### The Datastore ###
   
 Beyond the defaults for job processing outlined above, I hope that once work is completed, an author could swap out the default ``Store`` or override particular methods of ``Store`` to operate on non-MongoDB datastores.  MongoDB is the default because my personal needs for this project require Mongo.
 
-  
 As all Mongo environments are going to be highly specialized, the ``Store`` class can be configured prior to use. The ``Store`` class is highly specialized for simply retrieving a single documment, keyed off an ``entry_id`` which corresponds to ``_id`` in our Mongo collection. A [sample Rakefile](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/server.rb) has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:
 
-  
 * ``Crocoduck::Store.server_cluster``: This is an array of arrays corresponding your set of ``mongod``'s. These might take the form of: ``[['127.0.0.1', 27017]]`` in development or ``[['10.10.10.2', 27017], ['10.10.10.10', 27017], ['10.10.10.9', 27017]]`` in production.
 * ``Crocoduck::Store.server_db``: This is the name of the database your workers will operate on, e.g. "ars".
 * ``Crocoduck::Store.server_collection``: The name of the document collection your works will operate on, e.g. "entries".
@@ -44,17 +40,14 @@ As all Mongo environments are going to be highly specialized, the ``Store`` clas
   
 There is a small, Sinatra-based server that ships with this project.  This is really only useful for injecting artificial jobs into Resque for testing purposes.
 
-  
 ### Resque/Redis Configuration ###
   
 Right now this is hardcoded in [``redis.rb``](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb), but will be extracted out so different Redis setups are possible—using Redis To Go for example.
 
-  
 ### Logging and Benchmarking ###
   
 A Crocoduck job should automatically have ``logger`` and ``benchmark`` methods included.  Use these as you see necessary, some examples:
 
-  
     :001 > logger.warn "Could not connect to the shorturl webservice, details: ..."
 
     => I, [2011-04-24T14:28:32.687127 #97611]  INFO -- : Could not connect to the shorturl webservice, details: ...
