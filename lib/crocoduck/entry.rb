@@ -1,4 +1,3 @@
-require 'json'
 require 'crocoduck/job'
 require 'crocoduck/redis'
 require 'crocoduck/resque'
