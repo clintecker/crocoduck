@@ -10,7 +10,7 @@ On Github: [https://github.com/clintecker/crocoduck](https://github.com/clinteck
   
 To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as ``Entry`` objects in this project.
 
-The [``Job`` class](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.html) itself is initialized with an [``Entry``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.html) which knows about its own [``Store``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.html). Crocoduck Jobs should inherit from the base ``Job`` class and override, at the very minimum, the ``do_work`` method.  This is where you will access data from the job's ``Entry`` instance, do some sort of process, and store the results back onto the ``Entry`` itself or somewhere else in the store.
+The [``Job`` class](http://clintecker.github.com/crocoduck/docs/job.html) itself is initialized with an [``Entry``](http://clintecker.github.com/crocoduck/docs/entry.html) which knows about its own [``Store``](http://clintecker.github.com/crocoduck/docs/store.html). Crocoduck Jobs should inherit from the base ``Job`` class and override, at the very minimum, the ``do_work`` method.  This is where you will access data from the job's ``Entry`` instance, do some sort of process, and store the results back onto the ``Entry`` itself or somewhere else in the store.
 
 The base Crocoduck job uses a Resque queue name of ``:crocoduck``.  This can be left alone or modified, depending on your Job/Queue needs.
 
@@ -31,7 +31,7 @@ Your environment and your jobs must be imported for Resque to be able to use the
   
 Beyond the defaults for job processing outlined above, I hope that once work is completed, an author could swap out the default ``Store`` or override particular methods of ``Store`` to operate on non-MongoDB datastores.  MongoDB is the default because my personal needs for this project require Mongo.
 
-As all Mongo environments are going to be highly specialized, the ``Store`` class can be configured prior to use. The ``Store`` class is highly specialized for simply retrieving a single documment, keyed off an ``entry_id`` which corresponds to ``_id`` in our Mongo collection. A [sample Rakefile](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/server.html) has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:
+As all Mongo environments are going to be highly specialized, the ``Store`` class can be configured prior to use. The ``Store`` class is highly specialized for simply retrieving a single documment, keyed off an ``entry_id`` which corresponds to ``_id`` in our Mongo collection. A [sample Rakefile](https://github.com/clintecker/crocoduck/blob/master/Rakefile) has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:
 
 * ``Crocoduck::Store.server_cluster``: This is an array of arrays corresponding your set of ``mongod``'s. These might take the form of: ``[['127.0.0.1', 27017]]`` in development or ``[['10.10.10.2', 27017], ['10.10.10.10', 27017], ['10.10.10.9', 27017]]`` in production.
 * ``Crocoduck::Store.server_db``: This is the name of the database your workers will operate on, e.g. "ars".
@@ -40,11 +40,11 @@ As all Mongo environments are going to be highly specialized, the ``Store`` clas
 
 ### Server ###
   
-There is a small, Sinatra-based server that ships with this project.  This is really only useful for injecting artificial jobs into Resque for testing purposes.
+There is a small, [Sinatra-based server](http://clintecker.github.com/crocoduck/docs/server.html) that ships with this project.  This is really only useful for injecting artificial jobs into Resque for testing purposes.
 
 ### Resque/Redis Configuration ###
   
-Right now this is hardcoded in [``redis.html``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.html), but will be extracted out so different Redis setups are possible—using Redis To Go for example.
+Right now this is hardcoded in [``redis.rb``](http://clintecker.github.com/crocoduck/docs/redis.html), but will be extracted out so different Redis setups are possible—using Redis To Go for example.
 
 ### Logging and Benchmarking ###
   
@@ -67,4 +67,4 @@ A Crocoduck job should automatically have ``logger`` and ``benchmark`` methods i
     
 ### Want to know more? ###
 
-Read the [annotated source code](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.html)!
+Read the [annotated source code](http://clintecker.github.com/crocoduck/docs/job.html)!
