@@ -6,9 +6,9 @@
 
 <p>To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as <code>Entry</code> objects in this project.</p>
 
-<p>The <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb"><code>Job</code> class</a> itself is initialized with an <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.rb"><code>Entry</code></a> which</p>
+<p>The <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb"><code>Job</code> class</a> itself is initialized with an <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.rb"><code>Entry</code></a> which</p>
 
-<pre><code>knows about its own [``Store``](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb). Crocoduck Jobs should inherit
+<pre><code>knows about its own [``Store``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb). Crocoduck Jobs should inherit
 from the base ``Job`` class and override, at the very minimum, the ``do_work`` method.  This is where you will access data from the job's ``Entry`` instance, do some sort of process, and store the results back onto the ``Entry`` itself or somewhere else in the store.
 </code></pre>
 
@@ -34,7 +34,7 @@ from the base ``Job`` class and override, at the very minimum, the ``do_work`` m
 
 <p>Beyond the defaults for job processing outlined above, I hope that once work is completed, an author could swap out the default <code>Store</code> or override particular methods of <code>Store</code> to operate on non-MongoDB datastores.  MongoDB is the default because my personal needs for this project require Mongo.</p>
 
-<p>As all Mongo environments are going to be highly specialized, the <code>Store</code> class can be configured prior to use. The <code>Store</code> class is highly specialized for simply retrieving a single documment, keyed off an <code>entry_id</code> which corresponds to <code>_id</code> in our Mongo collection. A <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/server.rb">sample Rakefile</a> has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:</p>
+<p>As all Mongo environments are going to be highly specialized, the <code>Store</code> class can be configured prior to use. The <code>Store</code> class is highly specialized for simply retrieving a single documment, keyed off an <code>entry_id</code> which corresponds to <code>_id</code> in our Mongo collection. A <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/server.rb">sample Rakefile</a> has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:</p>
 
 <ul>
 <li><code>Crocoduck::Store.server_cluster</code>: This is an array of arrays corresponding your set of <code>mongod</code>'s. These might take the form of: <code>[['127.0.0.1', 27017]]</code> in development or <code>[['10.10.10.2', 27017], ['10.10.10.10', 27017], ['10.10.10.9', 27017]]</code> in production.</li>
@@ -50,7 +50,7 @@ from the base ``Job`` class and override, at the very minimum, the ``do_work`` m
 
 <h3>Resque/Redis Configuration</h3>
 
-<p>Right now this is hardcoded in <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb"><code>redis.rb</code></a>, but will be extracted out so different Redis setups are possible—using Redis To Go for example.</p>
+<p>Right now this is hardcoded in <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb"><code>redis.rb</code></a>, but will be extracted out so different Redis setups are possible—using Redis To Go for example.</p>
 
 <h3>Logging and Benchmarking</h3>
 
@@ -74,4 +74,4 @@ end
 
 <h3>Want to know more?</h3>
 
-<p>Read the <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb">annotated source code</a>!</p></body></html>
+<p>Read the <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb">annotated source code</a>!</p></body></html>
