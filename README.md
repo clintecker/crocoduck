@@ -4,7 +4,7 @@ A specialized Resque Job system for mutating documents stored in MongoDB
   
 ### Goals ###
   
-To make a nice, extensible Resque Job framework for making changes to MongoDB documents. These are referred to as ``Entry`` objects in this project.
+To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as ``Entry`` objects in this project.
 
 The [``Job`` class](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb) itself is initialized with an [``Entry``](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.rb) which
     knows about its own [``Store``](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb). Crocoduck Jobs should inherit
