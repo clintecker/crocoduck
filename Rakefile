@@ -1,7 +1,5 @@
 $:.unshift File.expand_path('../lib', __FILE__)
-require 'mongo'
 require 'resque/tasks'
-require 'crocoduck/job'
 
 task :default => :test
 
