@@ -310,3 +310,80 @@ end
 <h3>Want to know more?</h3>
 
 <p>Read the <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb">annotated source code</a>!</p></body></html>
+<\!DOCTYPE html><html lang="en"><head><title>Crocoduck: A specialized Resque Job System</title></head><body><h3>What is Crocoduck?</h3>
+
+<p>A specialized Resque Job system for mutating documents stored in MongoDB</p>
+
+<h3>Goals</h3>
+
+<p>To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as <code>Entry</code> objects in this project.</p>
+
+<p>The <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb"><code>Job</code> class</a> itself is initialized with an <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.rb"><code>Entry</code></a> which</p>
+
+<pre><code>knows about its own [``Store``](https://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb). Crocoduck Jobs should inherit
+from the base ``Job`` class and override, at the very minimum, the ``do_work`` method.  This is where you will access data from the job's ``Entry`` instance, do some sort of process, and store the results back onto the ``Entry`` itself or somewhere else in the store.
+</code></pre>
+
+<p>The base Crocoduck job uses a Resque queue name of <code>:crocoduck</code>.  This can be left alone or modified, depending on your Job/Queue needs.</p>
+
+<p>In addition, a job author can override several other methods to handle circumstances specific to their project.  These are as follows:</p>
+
+<ul>
+<li><code>Job.setup</code>: This method runs just before <code>do_work</code>, on the base Job class, we store the entry's store object on the Job itself for convenience.</li>
+<li><code>Job.handle_exception(e)</code>: By default the exception is merely raised for Resque to capture and log.  You might want to do some other work here, logging for instance.  You should probably always raise the exception for Resque's sake, unless you have a good reason.</li>
+<li><code>Job.finished</code>: This is run once the <code>do_work</code> has finished successfully.  The converse of <code>handle_exception</code>.</li>
+<li><code>Job.cleanup</code>: This is run regardless of your job's success or failure.  By default we simply call <code>Store.close</code>.</li>
+</ul>
+
+
+<p>In an ideal world, one could install Crocoduck, and then build jobs on top of this class without having to do much beyond implementing their <code>do_work</code> code and possibly modifying the job's <code>self.queue</code> name.</p>
+
+<h3>Environments</h3>
+
+<p>Your environment and your jobs must be imported for Resque to be able to use them when a matching job comes in on your specified queue.  An environment variable <code>CROCODUCK_ENV</code> is used to specify the name of the current operating environment.  This is currently only used to import our job classes and configure the <code>Store</code> options, but will later be expanded to the Redis configuration for Resque.  See the example</p>
+
+<h3>The Datastore</h3>
+
+<p>Beyond the defaults for job processing outlined above, I hope that once work is completed, an author could swap out the default <code>Store</code> or override particular methods of <code>Store</code> to operate on non-MongoDB datastores.  MongoDB is the default because my personal needs for this project require Mongo.</p>
+
+<p>As all Mongo environments are going to be highly specialized, the <code>Store</code> class can be configured prior to use. The <code>Store</code> class is highly specialized for simply retrieving a single documment, keyed off an <code>entry_id</code> which corresponds to <code>_id</code> in our Mongo collection. A <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/server.rb">sample Rakefile</a> has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:</p>
+
+<ul>
+<li><code>Crocoduck::Store.server_cluster</code>: This is an array of arrays corresponding your set of <code>mongod</code>'s. These might take the form of: <code>[['127.0.0.1', 27017]]</code> in development or <code>[['10.10.10.2', 27017], ['10.10.10.10', 27017], ['10.10.10.9', 27017]]</code> in production.</li>
+<li><code>Crocoduck::Store.server_db</code>: This is the name of the database your workers will operate on, e.g. "ars".</li>
+<li><code>Crocoduck::Store.server_collection</code>: The name of the document collection your works will operate on, e.g. "entries".</li>
+<li><code>Crocoduck::Store.id_field</code>: The name of the field corresponding to our concept of "entry_id".  A field that uniquely identifies an entry document.</li>
+</ul>
+
+
+<h3>Server</h3>
+
+<p>There is a small, Sinatra-based server that ships with this project.  This is really only useful for injecting artificial jobs into Resque for testing purposes.</p>
+
+<h3>Resque/Redis Configuration</h3>
+
+<p>Right now this is hardcoded in <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.rb"><code>redis.rb</code></a>, but will be extracted out so different Redis setups are possible—using Redis To Go for example.</p>
+
+<h3>Logging and Benchmarking</h3>
+
+<p>A Crocoduck job should automatically have <code>logger</code> and <code>benchmark</code> methods included.  Use these as you see necessary, some examples:</p>
+
+<pre><code>:001 &gt; logger.warn "Could not connect to the shorturl webservice, details: ..."
+
+=&gt; I, [2011-04-24T14:28:32.687127 #97611]  INFO -- : Could not connect to the shorturl webservice, details: ...
+
+
+:002 &gt; logger.debug "Connecting to xyz webservice"
+
+=&gt; D, [2011-04-24T14:30:45.410202 #97732]  DEBUG -- : Connecting to xyz webservice
+
+:003 &gt; benchmark :info, "XYZ Job Finished" do
+    do_work
+end
+
+=&gt; I, [2011-04-24T14:30:45.396550 #97732]  INFO -- : Ran Job (0.02146s)
+</code></pre>
+
+<h3>Want to know more?</h3>
+
+<p>Read the <a href="https://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.rb">annotated source code</a>!</p></body></html>
