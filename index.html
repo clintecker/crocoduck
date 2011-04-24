@@ -10,7 +10,7 @@
 
 <p>To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as <code>Entry</code> objects in this project.</p>
 
-<p>The <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.html"><code>Job</code> class</a> itself is initialized with an <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.html"><code>Entry</code></a> which knows about its own <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.html"><code>Store</code></a>. Crocoduck Jobs should inherit from the base <code>Job</code> class and override, at the very minimum, the <code>do_work</code> method.  This is where you will access data from the job's <code>Entry</code> instance, do some sort of process, and store the results back onto the <code>Entry</code> itself or somewhere else in the store.</p>
+<p>The <a href="http://clintecker.github.com/crocoduck/docs/job.html"><code>Job</code> class</a> itself is initialized with an <a href="http://clintecker.github.com/crocoduck/docs/entry.html"><code>Entry</code></a> which knows about its own <a href="http://clintecker.github.com/crocoduck/docs/store.html"><code>Store</code></a>. Crocoduck Jobs should inherit from the base <code>Job</code> class and override, at the very minimum, the <code>do_work</code> method.  This is where you will access data from the job's <code>Entry</code> instance, do some sort of process, and store the results back onto the <code>Entry</code> itself or somewhere else in the store.</p>
 
 <p>The base Crocoduck job uses a Resque queue name of <code>:crocoduck</code>.  This can be left alone or modified, depending on your Job/Queue needs.</p>
 
@@ -34,7 +34,7 @@
 
 <p>Beyond the defaults for job processing outlined above, I hope that once work is completed, an author could swap out the default <code>Store</code> or override particular methods of <code>Store</code> to operate on non-MongoDB datastores.  MongoDB is the default because my personal needs for this project require Mongo.</p>
 
-<p>As all Mongo environments are going to be highly specialized, the <code>Store</code> class can be configured prior to use. The <code>Store</code> class is highly specialized for simply retrieving a single documment, keyed off an <code>entry_id</code> which corresponds to <code>_id</code> in our Mongo collection. A <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/server.html">sample Rakefile</a> has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:</p>
+<p>As all Mongo environments are going to be highly specialized, the <code>Store</code> class can be configured prior to use. The <code>Store</code> class is highly specialized for simply retrieving a single documment, keyed off an <code>entry_id</code> which corresponds to <code>_id</code> in our Mongo collection. A <a href="https://github.com/clintecker/crocoduck/blob/master/Rakefile">sample Rakefile</a> has been included to show how one might configure the Store prior to spooling up Resque workers. The options are as follows:</p>
 
 <ul>
 <li><code>Crocoduck::Store.server_cluster</code>: This is an array of arrays corresponding your set of <code>mongod</code>'s. These might take the form of: <code>[['127.0.0.1', 27017]]</code> in development or <code>[['10.10.10.2', 27017], ['10.10.10.10', 27017], ['10.10.10.9', 27017]]</code> in production.</li>
@@ -46,11 +46,11 @@
 
 <h3>Server</h3>
 
-<p>There is a small, Sinatra-based server that ships with this project.  This is really only useful for injecting artificial jobs into Resque for testing purposes.</p>
+<p>There is a small, <a href="http://clintecker.github.com/crocoduck/docs/server.html">Sinatra-based server</a> that ships with this project.  This is really only useful for injecting artificial jobs into Resque for testing purposes.</p>
 
 <h3>Resque/Redis Configuration</h3>
 
-<p>Right now this is hardcoded in <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.html"><code>redis.html</code></a>, but will be extracted out so different Redis setups are possible—using Redis To Go for example.</p>
+<p>Right now this is hardcoded in <a href="http://clintecker.github.com/crocoduck/docs/redis.html"><code>redis.rb</code></a>, but will be extracted out so different Redis setups are possible—using Redis To Go for example.</p>
 
 <h3>Logging and Benchmarking</h3>
 
@@ -74,4 +74,4 @@ end
 
 <h3>Want to know more?</h3>
 
-<p>Read the <a href="http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.html">annotated source code</a>!</p></body></html>
+<p>Read the <a href="http://clintecker.github.com/crocoduck/docs/job.html">annotated source code</a>!</p></body></html>
