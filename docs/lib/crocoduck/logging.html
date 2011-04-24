@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>logging.rb</title>
+  <link rel="stylesheet" href="http://github.com/jashkenas/docco/raw/0.3.0/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="entry.html">entry.rb</a>
+          <a class="source" href="job.html">job.rb</a>
+          <a class="source" href="logging.html">logging.rb</a>
+          <a class="source" href="redis.html">redis.rb</a>
+          <a class="source" href="resque.html">resque.rb</a>
+          <a class="source" href="server.html">server.rb</a>
+          <a class="source" href="store.html">store.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>logging.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>Include Loggging into your class to get a logger and benchmark
+object for logging errors or information to stdout and for profiling
+interesting bits of code.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;logger&#39;</span>
+
+<span class="k">module</span> <span class="nn">Crocoduck</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">logger</span>
+    <span class="vi">@logger</span> <span class="o">||=</span> <span class="no">Logger</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vg">$stderr</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">module</span> <span class="nn">Logging</span>
+    <span class="kp">private</span>
+      <span class="k">def</span> <span class="nf">logger</span>
+        <span class="no">Crocoduck</span><span class="o">.</span><span class="n">logger</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">benchmark</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kp">nil</span>
+        <span class="n">ms</span> <span class="o">=</span> <span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="n">result</span> <span class="o">=</span> <span class="k">yield</span> <span class="p">}</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="s1">&#39;%s (%.5fs)&#39;</span> <span class="o">%</span> <span class="o">[</span> <span class="n">message</span><span class="p">,</span> <span class="n">ms</span> <span class="o">]</span><span class="p">)</span>
+        <span class="n">result</span>
+      <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

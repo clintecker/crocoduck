@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>store.rb</title>
+  <link rel="stylesheet" href="http://github.com/jashkenas/docco/raw/0.3.0/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="entry.html">entry.rb</a>
+          <a class="source" href="job.html">job.rb</a>
+          <a class="source" href="logging.html">logging.rb</a>
+          <a class="source" href="redis.html">redis.rb</a>
+          <a class="source" href="resque.html">resque.rb</a>
+          <a class="source" href="server.html">server.rb</a>
+          <a class="source" href="store.html">store.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>store.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;mongo&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;crocoduck/logging&#39;</span>
+
+<span class="k">module</span> <span class="nn">Crocoduck</span>
+  <span class="k">class</span> <span class="nc">Store</span>
+    <span class="kp">include</span> <span class="no">Logging</span>
+    <span class="vi">@id_field</span> <span class="o">=</span> <span class="s1">&#39;_id&#39;</span>
+    <span class="vi">@server_cluster</span> <span class="o">=</span> <span class="kp">nil</span>
+    <span class="vi">@server_db</span> <span class="o">=</span> <span class="kp">nil</span>
+    <span class="vi">@server_collection</span> <span class="o">=</span> <span class="kp">nil</span>
+
+    <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+      <span class="kp">attr_accessor</span> <span class="ss">:id_field</span><span class="p">,</span> <span class="ss">:server_cluster</span><span class="p">,</span> <span class="ss">:server_db</span><span class="p">,</span> <span class="ss">:server_collection</span>
+    <span class="k">end</span>
+    
+    <span class="kp">attr_accessor</span> <span class="ss">:store</span><span class="p">,</span> <span class="ss">:database</span><span class="p">,</span> <span class="ss">:collection</span>
+
+    <span class="k">def</span> <span class="nf">setup?</span>
+      <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_cluster</span> <span class="o">&amp;&amp;</span> 
+      <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_db</span> <span class="o">&amp;&amp;</span> 
+      <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_collection</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">collection</span>
+      <span class="vi">@collection</span> <span class="o">||=</span> <span class="n">database</span><span class="o">.</span><span class="n">collection</span> <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_collection</span>
+    <span class="k">end</span>
+    
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">entry_id</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+      <span class="n">collection</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+        <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">id_field</span> <span class="o">=&gt;</span> <span class="n">entry_id</span><span class="p">},</span> 
+        <span class="p">{</span><span class="s1">&#39;$set&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="n">field</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="p">}</span>
+      <span class="p">},</span> <span class="ss">:safe</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+    <span class="k">end</span>
+        
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+      <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span>
+        <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">id_field</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="o">.</span><span class="n">to_i</span>
+      <span class="p">})</span>
+    <span class="k">end</span>
+    
+    <span class="k">def</span> <span class="nf">close</span>
+      <span class="n">store</span><span class="o">.</span><span class="n">close</span>
+    <span class="k">end</span>
+    
+    <span class="kp">private</span>
+    
+    <span class="k">def</span> <span class="nf">database</span>
+      <span class="vi">@database</span> <span class="o">||=</span> <span class="n">store</span><span class="o">.</span><span class="n">db</span><span class="p">(</span><span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_db</span><span class="p">)</span>
+    <span class="k">end</span>
+    
+    <span class="k">def</span> <span class="nf">store</span>
+      <span class="vi">@store</span> <span class="o">||=</span> <span class="no">Mongo</span><span class="o">::</span><span class="no">ReplSetConnection</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_cluster</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
