@@ -10,9 +10,7 @@ On Github: [https://github.com/clintecker/crocoduck](https://github.com/clinteck
   
 To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as ``Entry`` objects in this project.
 
-The [``Job`` class](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.html) itself is initialized with an [``Entry``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.html) which
-    knows about its own [``Store``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.html). Crocoduck Jobs should inherit
-    from the base ``Job`` class and override, at the very minimum, the ``do_work`` method.  This is where you will access data from the job's ``Entry`` instance, do some sort of process, and store the results back onto the ``Entry`` itself or somewhere else in the store.
+The [``Job`` class](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/job.html) itself is initialized with an [``Entry``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/entry.html) which knows about its own [``Store``](http://clintecker.github.com/crocoduck/docs/lib/crocoduck/redis.html). Crocoduck Jobs should inherit from the base ``Job`` class and override, at the very minimum, the ``do_work`` method.  This is where you will access data from the job's ``Entry`` instance, do some sort of process, and store the results back onto the ``Entry`` itself or somewhere else in the store.
 
 The base Crocoduck job uses a Resque queue name of ``:crocoduck``.  This can be left alone or modified, depending on your Job/Queue needs.
 
