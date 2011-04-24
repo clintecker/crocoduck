@@ -2,6 +2,10 @@
   
 A specialized Resque Job system for mutating documents stored in MongoDB
   
+### Where Can I Get Crocoduck ###
+
+On Github: [https://github.com/clintecker/crocoduck](https://github.com/clintecker/crocoduck)
+  
 ### Goals ###
   
 To make a nice, extensible Resque Job framework for altering MongoDB documents. These are referred to as ``Entry`` objects in this project.

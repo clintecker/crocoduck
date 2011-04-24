@@ -1,0 +1,21 @@
+<!DOCTYPE html>  <html> <head>   <title>server.rb</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="entry.html">                 entry.rb               </a>                                           <a class="source" href="job.html">                 job.rb               </a>                                           <a class="source" href="logging.html">                 logging.rb               </a>                                           <a class="source" href="redis.html">                 redis.rb               </a>                                           <a class="source" href="resque.html">                 resque.rb               </a>                                           <a class="source" href="server.html">                 server.rb               </a>                                           <a class="source" href="store.html">                 store.rb               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               server.rb             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;crocoduck/entry&#39;</span>
+
+<span class="k">module</span> <span class="nn">Crocoduck</span>
+  <span class="k">class</span> <span class="nc">Server</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+    <span class="n">set</span> <span class="ss">:root</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span>
+
+    <span class="n">get</span> <span class="s2">&quot;/&quot;</span> <span class="k">do</span>
+      <span class="n">erb</span> <span class="ss">:index</span>
+    <span class="k">end</span>
+
+    <span class="n">post</span> <span class="s2">&quot;/&quot;</span> <span class="k">do</span>
+      <span class="n">entry_id</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:entry_id</span><span class="o">]</span>
+      <span class="n">entry</span> <span class="o">=</span> <span class="no">Entry</span><span class="o">.</span><span class="n">new</span> <span class="n">entry_id</span>
+      <span class="n">entry</span><span class="o">.</span><span class="n">schedule</span>
+      <span class="n">redirect</span> <span class="s2">&quot;/&quot;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
