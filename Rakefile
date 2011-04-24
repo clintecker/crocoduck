@@ -10,5 +10,11 @@ namespace :resque do
   end
 end
 
+desc "build the docco documentation"
+task :docs do
+  system 'docco ./lib/crocoduck/*.rb'
+  system 'echo "<!DOCTYPE html><html lang=\"en\"><head><title>Crocoduck: A specialized Resque Job System</title></head><body>`rdiscount README.md`</body></html>" > index.html'
+end
+
 require 'rake/testtask'
 Rake::TestTask.new

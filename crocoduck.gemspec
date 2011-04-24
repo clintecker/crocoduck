@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'resque'
   s.add_dependency 'sinatra'
   s.add_dependency 'mongo'
+  s.add_development_dependency 'rocco'
+  s.add_development_dependency 'rdiscount'
   
   s.authors = ["Clint Ecker"]
   s.email   = "me@clintecker.com"
