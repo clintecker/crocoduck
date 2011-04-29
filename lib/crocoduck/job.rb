@@ -9,7 +9,7 @@ module Crocoduck
   class Job
     # Override the value of ``@queue`` to specify which resque workers will 
     # process this job.
-    @queue = :generic
+    @queue = :low
     
     # ``perform`` is the method called by Resque. A Crocoduck job only expects
     # an ``entry_id`` corresponding to a record in your Mongo store.  An
@@ -83,7 +83,7 @@ module Crocoduck
     # Exception handling is parceled out to ``Job`` methods you can override
     # to handle cleanup specific to your task.
     rescue Exception => e
-      handle_exception e
+      handle_job_exception e
     else
       finished
     ensure

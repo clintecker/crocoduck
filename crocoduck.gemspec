@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name      = 'crocoduck'
-  s.version   = '0.0.1'
+  s.version   = '0.0.2'
   s.date      = '2011-04-23'
 
   s.homepage    = "https://github.com/clintecker/crocoduck"
@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'resque'
   s.add_dependency 'sinatra'
   s.add_dependency 'mongo'
-  s.add_development_dependency 'rocco'
   s.add_development_dependency 'rdiscount'
   
   s.authors = ["Clint Ecker"]
