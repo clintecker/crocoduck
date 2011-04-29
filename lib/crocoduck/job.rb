@@ -39,7 +39,13 @@ module Crocoduck
       # store.update entry_id, 'shorturl_status, job_status
       logger.info "Ending work"
     end
-
+    
+    # If you job failed, you can do something interesting here.  Generally
+    # you will want to ultimately raise the exception so Resque can track it.
+    def handle_exception(e)
+      raise e
+    end
+    
     # This method will be called immediately before sanity checks and before
     # ``do_work`` is called.
     def setup
@@ -78,7 +84,7 @@ module Crocoduck
     # Exception handling is parceled out to ``Job`` methods you can override
     # to handle cleanup specific to your task.
     rescue Exception => e
-      raise e
+      handle_exception e
     else
       finished
     ensure
