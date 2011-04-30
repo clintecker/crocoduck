@@ -45,6 +45,10 @@ module Crocoduck
       store.update entry_id, field, value
     end
     
+    def close
+      store.close
+    end
+    
     private
     
     # When the ``entry`` property of an Entry object is accessed
