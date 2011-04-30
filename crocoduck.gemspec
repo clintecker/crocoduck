@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name      = 'crocoduck'
-  s.version   = '0.0.2'
-  s.date      = '2011-04-23'
+  s.version   = '0.0.3'
+  s.date      = '2011-04-30'
 
   s.homepage    = "https://github.com/clintecker/crocoduck"
-  s.summary     = "Resque Jobs working on MongoDB"
+  s.summary     = "Resque Jobs working on MongoDB documents"
   s.description = <<-EOS
     Crocoduck is a Resque job system that seeks to model the pattern of mutating MongoDB documents.
   EOS
