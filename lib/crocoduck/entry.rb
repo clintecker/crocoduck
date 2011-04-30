@@ -45,6 +45,8 @@ module Crocoduck
       store.update entry_id, field, value
     end
     
+    # Call this method on your entries to have them close their own
+    # store object.
     def close
       store.close
     end
