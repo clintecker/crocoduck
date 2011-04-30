@@ -1,10 +1,15 @@
-<!DOCTYPE html>  <html> <head>   <title>store.rb</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="entry.html">                 entry.rb               </a>                                           <a class="source" href="job.html">                 job.rb               </a>                                           <a class="source" href="logging.html">                 logging.rb               </a>                                           <a class="source" href="redis.html">                 redis.rb               </a>                                           <a class="source" href="resque.html">                 resque.rb               </a>                                           <a class="source" href="server.html">                 server.rb               </a>                                           <a class="source" href="store.html">                 store.rb               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               store.rb             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nb">require</span> <span class="s1">&#39;mongo&#39;</span>
+<!DOCTYPE html>  <html> <head>   <title>store.rb</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="entry.html">                 entry.rb               </a>                                           <a class="source" href="job.html">                 job.rb               </a>                                           <a class="source" href="logging.html">                 logging.rb               </a>                                           <a class="source" href="redis.html">                 redis.rb               </a>                                           <a class="source" href="resque.html">                 resque.rb               </a>                                           <a class="source" href="server.html">                 server.rb               </a>                                           <a class="source" href="store.html">                 store.rb               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               store.rb             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>The Crocoduck::Store object handles the concern of talking to your
+data storage layer.  By default, we have implemented this on top
+of MongoDB, so it may be that many of the choices made here highly
+favor document-based databases.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nb">require</span> <span class="s1">&#39;mongo&#39;</span>
 <span class="nb">require</span> <span class="s1">&#39;crocoduck/logging&#39;</span>
 
 <span class="k">module</span> <span class="nn">Crocoduck</span>
   <span class="k">class</span> <span class="nc">Store</span>
-    <span class="kp">include</span> <span class="no">Logging</span>
-    <span class="vi">@id_field</span> <span class="o">=</span> <span class="s1">&#39;_id&#39;</span>
+    <span class="kp">include</span> <span class="no">Logging</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>We have several class properties that defined how all Store
+objects will connect and query for information.  As stated
+before, many of these will only make sense for MongoDB or
+other similar document-based databases.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="vi">@id_field</span> <span class="o">=</span> <span class="s1">&#39;_id&#39;</span>
     <span class="vi">@server_cluster</span> <span class="o">=</span> <span class="kp">nil</span>
     <span class="vi">@server_db</span> <span class="o">=</span> <span class="kp">nil</span>
     <span class="vi">@server_collection</span> <span class="o">=</span> <span class="kp">nil</span>
@@ -14,44 +19,43 @@
     <span class="k">end</span>
     
     <span class="kp">attr_accessor</span> <span class="ss">:store</span><span class="p">,</span> <span class="ss">:database</span><span class="p">,</span> <span class="ss">:collection</span>
-
-    <span class="k">def</span> <span class="nf">setup?</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>A nice method to determine if there is enough information
+to potentially connect to the backing database.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">setup?</span>
       <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_cluster</span> <span class="o">&amp;&amp;</span> 
       <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_db</span> <span class="o">&amp;&amp;</span> 
       <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_collection</span>
     <span class="k">end</span>
 
-    <span class="k">def</span> <span class="nf">collection</span>
-      <span class="vi">@collection</span> <span class="o">||=</span> <span class="n">database</span><span class="o">.</span><span class="n">collection</span> <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_collection</span>
-    <span class="k">end</span>
-    
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">entry_id</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">close</span>
+      <span class="n">store</span><span class="o">.</span><span class="n">close</span>
+    <span class="k">end</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>A simple convienance method to update a single
+document in your datastore.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">entry_id</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
       <span class="n">collection</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
         <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">id_field</span> <span class="o">=&gt;</span> <span class="n">entry_id</span><span class="p">},</span> 
         <span class="p">{</span><span class="s1">&#39;$set&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="n">field</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="p">}</span>
       <span class="p">},</span> <span class="ss">:safe</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
     <span class="k">end</span>
-        
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Returns a single document given its ID</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
       <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span>
         <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">id_field</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="o">.</span><span class="n">to_i</span>
       <span class="p">})</span>
     <span class="k">end</span>
-    
-    <span class="k">def</span> <span class="nf">close</span>
-      <span class="n">store</span><span class="o">.</span><span class="n">close</span>
-    <span class="k">end</span>
-    
-    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="n">criteria</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Use this method to remove documents from your datastore.  Cares
+has been taken to prevent accidental database destruction.  Only
+pass {} to this method if you are 100% sure you want to clear the
+database.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="n">criteria</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
       <span class="k">return</span> <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">nil?</span>
-      <span class="n">store</span><span class="o">.</span><span class="n">remove</span> <span class="n">criteria</span>
+      <span class="n">collection</span><span class="o">.</span><span class="n">remove</span> <span class="n">criteria</span>
     <span class="k">end</span>
-    
-    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
-      <span class="n">store</span><span class="o">.</span><span class="n">insert</span> <span class="n">document</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Inserts a brand new document into the database</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+      <span class="n">collection</span><span class="o">.</span><span class="n">insert</span> <span class="n">document</span>
     <span class="k">end</span>
     
     <span class="kp">private</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>These methods create and cache objects that maintain the state and
+connectivity to the backend storage.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">collection</span>
+      <span class="vi">@collection</span> <span class="o">||=</span> <span class="n">database</span><span class="o">.</span><span class="n">collection</span> <span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_collection</span>
+    <span class="k">end</span>
     
     <span class="k">def</span> <span class="nf">database</span>
       <span class="vi">@database</span> <span class="o">||=</span> <span class="n">store</span><span class="o">.</span><span class="n">db</span><span class="p">(</span><span class="no">Crocoduck</span><span class="o">::</span><span class="no">Store</span><span class="o">.</span><span class="n">server_db</span><span class="p">)</span>
