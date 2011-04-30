@@ -16,7 +16,11 @@ module Crocoduck
     # ``Entry`` is instantiated with said ``entry_id`` and passed to a new
     # instance of this job and run is called on it.
     def self.perform(entry_id)
-      new(Entry.new entry_id).run
+      init_with_id(entry_id).run
+    end
+    
+    def self.init_with_id(entry_id)
+      new(Entry.new entry_id)
     end
     
     include Logging
@@ -49,7 +53,6 @@ module Crocoduck
     # This method will be called immediately before sanity checks and before
     # ``do_work`` is called.
     def setup
-      @store = entry.store
       logger.info "Job is setup"
     end
     
@@ -63,7 +66,7 @@ module Crocoduck
     # This method will always be called, regardless of the failure or
     # success of your job.
     def cleanup
-      @store.close
+      entry.close
       logger.info "Job cleaned up"
     end
     
