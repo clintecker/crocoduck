@@ -19,6 +19,8 @@ module Crocoduck
       init_with_id(entry_id).run
     end
     
+    # A convienance initializer that returns a Crocoduck::Job instance with
+    # its entry object ready to go.
     def self.init_with_id(entry_id)
       new(Entry.new entry_id)
     end
