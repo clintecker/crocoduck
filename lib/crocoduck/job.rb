@@ -33,7 +33,7 @@ module Crocoduck
       logger.info "Starting work"
       # Do Something with entry
       # entry.update "derp", "herp"
-      logger.info entry.entry['style_status']
+      logger.info entry["url"]
       # shorturl = shorturl.generate @entry.url
       # store.update entry_id, 'shorturl', shorturl
       # store.update entry_id, 'shorturl_status, job_status
