@@ -1,6 +1,12 @@
-### What is Crocoduck? ###
-  
-A specialized Resque Job system for mutating documents stored in MongoDB
+                                           
+                                           
+                            .         .    
+                            |         |    
+     .-..--..-.  .-..-.  .-.| .  . .-.|.-. 
+    (   |  (   )(  (   )(   | |  |(   |-.' 
+     `-''   `-'  `-'`-'  `-'`-`--`-`-''  `-
+ 
+A specialized Resque job system for mutating documents stored in MongoDB
   
 ### Where Can I Get Crocoduck ###
 
