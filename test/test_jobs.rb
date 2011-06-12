@@ -5,6 +5,7 @@ require 'crocoduck/job'
 
 class JobTest < Test::Unit::TestCase
   def setup
+    Crocoduck.logger.level = Logger::WARN
     store = Crocoduck::Store.new
     store.remove({})
     store.insert({
