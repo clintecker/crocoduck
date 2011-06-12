@@ -31,7 +31,7 @@ module Crocoduck
     
     include Logging
     
-    attr_accessor :entry, :store
+    attr_accessor :entry
     
     def initialize(entry)
       @entry = entry
@@ -85,8 +85,7 @@ module Crocoduck
       # The job will not process anything unless our datastore has enough
       # information to connect and if a valid entry object could be fetched
       # from the store.
-      return unless store.setup?
-      return unless entry.entry
+      return unless entry.setup?
       benchmark :info, "Running job" do
         do_work
       end
