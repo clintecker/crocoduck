@@ -11,6 +11,10 @@ module Crocoduck
     # process this job.
     @queue = :low
     
+    def self.description(s)
+      @description = s
+    end
+    
     # ``perform`` is the method called by Resque. A Crocoduck job only expects
     # an ``entry_id`` corresponding to a record in your Mongo store.  An
     # ``Entry`` is instantiated with said ``entry_id`` and passed to a new
