@@ -29,7 +29,7 @@ module Crocoduck
     #     :002 > e["url"]
     #      => "/apple/news/2011/04/this-is-not-a-real-article.ars"
     def [](key)
-      if entry.key? key
+      if entry.has_key? key
         entry[key]
       else
         nil
@@ -49,6 +49,10 @@ module Crocoduck
     # store object.
     def close
       store.close
+    end
+    
+    def setup?
+      store.setup? && !entry.nil?
     end
     
     private

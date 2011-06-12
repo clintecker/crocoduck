@@ -18,4 +18,8 @@ class JobTest < Test::Unit::TestCase
     assert_equal job.entry["url"], "/tech-policy/news/2011/04/pickpocketing-or-voluntary-auctions-the-wireless-spectrum-standoff.ars"
     job.entry.close
   end
+  
+  def test_job_perform
+    job = Crocoduck::Job.perform 50000
+  end
 end
