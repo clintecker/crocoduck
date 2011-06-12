@@ -2,3 +2,4 @@ log
 worker-local.rb
 tmp
 .DS_Store
+*.gem

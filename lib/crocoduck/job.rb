@@ -11,8 +11,8 @@ module Crocoduck
     # process this job.
     @queue = :low
     
-    def self.description(s)
-      @description = s
+    class << self
+      attr_accessor :description
     end
     
     # ``perform`` is the method called by Resque. A Crocoduck job only expects
